@@ -1,6 +1,6 @@
 // buat fungsi yang didalamnya menampung cara tampilkan json jadi objek dengan ajax lalu munculkan pada halaman web.
 function searchMovie() {
-  // untuk mengosongkan terlebih dahulu movie-list/ movie yang dicari
+  // untuk mengosongkan terlebih dahulu semua data dalam movie-list/ movie yang dicari
   $("#movie-list").html("");
 
   // pakai method ajax yaitu $.ajax() yang merupakan fungsi asli daripada $.getJSON()
@@ -36,7 +36,8 @@ function searchMovie() {
               <div class="card-body">
                 <h5 class="card-title">${data.Title}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">${data.Year}</h6>
-                <a href="#" class="card-link">Card link</a>
+                <a href="#" class="card-link see-detail" data-bs-toggle="modal"
+                data-bs-target="#exampleModal" data-id="${data.imdbID}">See Detail</a>
               </div>
             </div>
           </div>
@@ -66,4 +67,50 @@ $("#search-input").on("keyup", function (event) {
     // jalankan fungsi
     searchMovie();
   }
+});
+
+// pada saat tombol see detail diklik
+// cara baca : cari id movie-list, lalu ketika saya klik elemen class see-detail didalamnya, maka berikan fungsi berikut ini.
+$("#movie-list").on("click", ".see-detail", function () {
+  // jalankan ajax
+  $.ajax({
+    // url tujuan
+    url: "http://www.omdbapi.com",
+    // type / method (get,post,put,delete)
+    type: "get",
+    // data kembalian (teks,json,jsonp,xml)
+    dataType: "json",
+    // data kiriman atau kirim data ke url tujuan (http://www.omdbapi.com)
+    data: {
+      // apikey
+      apikey: "bbecf148",
+      // data pencarian
+      i: $(this).data("id"), //tombol see-detail yang diklik lalu ambil datanya yang namanya id
+    },
+    success: function (movie) {
+      // jika idnya benar, maka
+      if (movie.Response === "True") {
+        // cari class modal-body, lalu htmlnya kita isi dengan
+        $(".modal-body").html(`
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-4">
+                <img src="${movie.Poster}" class="img-fluid">
+              </div
+
+              <div class="col-md-8">
+                <ul class="list-group">
+                  <li class="list-group-item"><h3>${movie.Title}</h3></li>
+                  <li class="list-group-item">Release :${movie.Released}</li>
+                  <li class="list-group-item">Genre :${movie.Genre}</li>
+                  <li class="list-group-item">Director :${movie.Director}</li>
+                  <li class="list-group-item">Actors :${movie.Actors}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        `);
+      }
+    },
+  });
 });
