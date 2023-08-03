@@ -1,0 +1,22 @@
+omdb api,
+Send all data requests to:
+
+http://www.omdbapi.com/?apikey=[yourkey]&
+
+
+1.)cara get request
+
+-buka my workspaces,
+-lalu pada method request pilih get lalu masukkan url api public(http://www.omdbapi.com)
+-pada params/parameter letakkan key dan value sesuai pada dokumentasi web api public, contoh :
+key : value
+apikey : 12871
+-jika sudah klik send
+-kalau resquest berhasil maka akan menampilkanpada body request
+
+
+cara consumenya/ olah api nya slalu lihat callback function jika berhasil, dan lihat nilai kembaliannya 
+contoh :
+success: function (hasil) {
+      console.log(hasil);
+    }
